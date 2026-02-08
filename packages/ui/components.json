@@ -6,15 +6,15 @@
   "tailwind": {
     "config": "",
     "css": "src/styles/globals.css",
-    "baseColor": "neutral",
+    "baseColor": "slate",
     "cssVariables": true
   },
   "iconLibrary": "lucide",
   "aliases": {
-    "components": "@workspace/ui/components",
-    "utils": "@workspace/ui/lib/utils",
-    "hooks": "@workspace/ui/hooks",
-    "lib": "@workspace/ui/lib",
-    "ui": "@workspace/ui/components"
+    "components": "@autocast/ui/components",
+    "utils": "@autocast/ui/lib/utils",
+    "hooks": "@autocast/ui/hooks",
+    "lib": "@autocast/ui/lib",
+    "ui": "@autocast/ui/components"
   }
 }
