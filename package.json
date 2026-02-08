@@ -9,8 +9,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@workspace/eslint-config": "workspace:*",
-    "@workspace/typescript-config": "workspace:*",
+    "@autocast/eslint-config": "workspace:*",
+    "@autocast/typescript-config": "workspace:*",
     "prettier": "^3.7.4",
     "turbo": "^2.6.3",
     "typescript": "5.7.3"
@@ -18,5 +18,18 @@
   "packageManager": "pnpm@10.4.1",
   "engines": {
     "node": ">=20"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@tailwindcss/oxide",
+      "core-js-pure",
+      "esbuild",
+      "protobufjs",
+      "sharp"
+    ],
+    "overrides": {
+      "hono": "4.11.3",
+      "zod": "3.25.76"
+    }
   }
 }
