@@ -1,0 +1,17 @@
+{
+  "name": "@autocast/api-client",
+  "type": "module",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@autocast/api": "workspace:*",
+    "hono": "^4.11.1"
+  },
+  "devDependencies": {
+    "@autocast/typescript-config": "workspace:*",
+    "@types/node": "^20.11.17",
+    "tsx": "^4.7.1",
+    "typescript": "^5.8.3"
+  }
+}
