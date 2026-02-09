@@ -1,5 +1,5 @@
 import { InferenceClient } from "@huggingface/inference";
-import { env } from "../../config/env.js";
+import { env } from "#config/env.js";
 
 const client = new InferenceClient(env.HF_TOKEN);
 

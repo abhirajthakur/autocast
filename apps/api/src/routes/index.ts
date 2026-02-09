@@ -1,10 +1,11 @@
+import { createRouter } from "#lib/create-app.js";
+import assetsRouter from "#routes/assets.js";
+import authRouter from "#routes/auth.js";
+import contentRouter from "#routes/content.js";
+import jobsRouter from "#routes/jobs.js";
+
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
-import { createRouter } from "../lib/create-app.js";
-import assetsRouter from "./assets.js";
-import authRouter from "./auth.js";
-import contentRouter from "./content.js";
-import jobsRouter from "./jobs.js";
 
 const app = createRouter()
   .use(logger())

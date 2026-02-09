@@ -1,5 +1,5 @@
+import app from "#routes/index.js";
 import { serve } from "@hono/node-server";
-import app from "./routes/index.js";
 
 serve(
   {

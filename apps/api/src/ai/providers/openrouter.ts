@@ -1,5 +1,5 @@
-import { env } from "../../config/env.js";
-import { scriptPrompt } from "../prompts.js";
+import { scriptPrompt } from "#ai/prompts.js";
+import { env } from "#config/env.js";
 
 async function openRouterGenerate(prompt: string, model: string): Promise<any> {
   if (!prompt || typeof prompt !== "string") {

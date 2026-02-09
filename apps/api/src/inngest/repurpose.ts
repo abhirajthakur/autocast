@@ -1,16 +1,17 @@
-import { AiProvider, AssetType, JobStatus, StepStatus } from "@autocast/shared";
-import { eq } from "drizzle-orm";
 import {
   geminiGenerateImage,
   geminiGenerateText,
   huggingFaceGenerateVideo,
   openRouterGenerateImage,
   openRouterGenerateText,
-} from "../ai/index.js";
-import { db } from "../db/index.js";
-import { assets, jobs, jobSteps } from "../db/schema.js";
-import { uploadToCloudinary } from "../lib/cloudinary.js";
-import { inngest } from "./client.js";
+} from "#ai/index.js";
+import { db } from "#db/index.js";
+import { assets, jobs, jobSteps } from "#db/schema.js";
+import { inngest } from "#inngest/client.js";
+import { uploadToCloudinary } from "#lib/cloudinary.js";
+
+import { AiProvider, AssetType, JobStatus, StepStatus } from "@autocast/shared";
+import { eq } from "drizzle-orm";
 
 export const contentPipeline = inngest.createFunction(
   { id: "autocast.content.pipeline" },

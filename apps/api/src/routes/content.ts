@@ -1,11 +1,12 @@
+import { db } from "#db/index.js";
+import { jobs } from "#db/schema.js";
+import { inngest } from "#inngest/client.js";
+import { createRouter } from "#lib/create-app.js";
+import authMiddleware from "#middleware/auth.js";
+
 import { JobStatus } from "@autocast/shared";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import { db } from "../db/index.js";
-import { jobs } from "../db/schema.js";
-import { inngest } from "../inngest/client.js";
-import { createRouter } from "../lib/create-app.js";
-import authMiddleware from "../middlewares/auth.js";
 
 const contentSchema = z.object({
   title: z.string().trim().min(1).optional(),

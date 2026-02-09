@@ -1,7 +1,7 @@
+import { auth } from "#lib/auth.js";
+import type { AuthType } from "#lib/types.js";
 import type { MiddlewareHandler } from "hono";
 import { createMiddleware } from "hono/factory";
-import { auth } from "../lib/auth.js";
-import type { AuthType } from "../lib/types.js";
 
 const authMiddleware: MiddlewareHandler<{
   Variables: AuthType;

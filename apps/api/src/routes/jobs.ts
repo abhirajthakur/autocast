@@ -1,9 +1,10 @@
+import { db } from "#db/index.js";
+import { jobIdSchema, jobs, jobSteps } from "#db/schema.js";
+import { createRouter } from "#lib/create-app.js";
+import authMiddleware from "#middleware/auth.js";
+
 import { zValidator } from "@hono/zod-validator";
 import { and, desc, eq } from "drizzle-orm";
-import { db } from "../db/index.js";
-import { jobIdSchema, jobs, jobSteps } from "../db/schema.js";
-import { createRouter } from "../lib/create-app.js";
-import authMiddleware from "../middlewares/auth.js";
 
 const jobsRouter = createRouter()
   .use(authMiddleware)

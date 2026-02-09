@@ -12,7 +12,17 @@
     "jsxImportSource": "hono/jsx",
     "outDir": "./dist",
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "#ai/*": ["src/ai/*"],
+      "#config/*": ["src/config/*"],
+      "#db/*": ["src/db/*"],
+      "#inngest/*": ["src/inngest/*"],
+      "#lib/*": ["src/lib/*"],
+      "#middleware/*": ["src/middleware/*"],
+      "#routes/*": ["src/routes/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

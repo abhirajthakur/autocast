@@ -1,9 +1,10 @@
+import { db } from "#db/index.js";
+import { assetIdSchema, assets, jobIdSchema } from "#db/schema.js";
+import { createRouter } from "#lib/create-app.js";
+import authMiddleware from "#middleware/auth.js";
+
 import { zValidator } from "@hono/zod-validator";
 import { and, eq } from "drizzle-orm";
-import { db } from "../db/index.js";
-import { assetIdSchema, assets, jobIdSchema } from "../db/schema.js";
-import { createRouter } from "../lib/create-app.js";
-import authMiddleware from "../middlewares/auth.js";
 
 const assetsRouter = createRouter()
   .use(authMiddleware)

@@ -10,6 +10,15 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
   },
+  "imports": {
+    "#ai/*": "./src/ai/*",
+    "#config/*": "./src/config/*",
+    "#db/*": "./src/db/*",
+    "#inngest/*": "./src/inngest/*",
+    "#lib/*": "./src/lib/*",
+    "#middleware/*": "./src/middleware/*",
+    "#routes/*": "./src/routes/*"
+  },
   "exports": {
     "./routes": "./src/routes/index.ts",
     "./schema": "./src/db/schema.ts"

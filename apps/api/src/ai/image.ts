@@ -1,5 +1,5 @@
-import { geminiGenerateImage } from "./providers/gemini.js";
-import { openRouterGenerateImage } from "./providers/openrouter.js";
+import { geminiGenerateImage } from "#ai/providers/gemini.js";
+import { openRouterGenerateImage } from "#ai/providers/openrouter.js";
 
 export async function generateImageWithFallback(
   prompt: string,
