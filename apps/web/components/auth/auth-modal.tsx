@@ -21,13 +21,11 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const signInSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .email({ message: "Please enter a valid email address" }),
+  email: z.email({ message: "Please enter a valid email address" }).trim(),
   password: z
     .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
+    .min(6, { message: "Password must be at least 6 characters" })
+    .trim(),
 });
 
 const signUpSchema = signInSchema.extend({
@@ -73,8 +71,8 @@ const AuthModal = ({
 
   const validateSignIn = () => {
     const result = signInSchema.safeParse({ email, password });
-    if (!result.success && result.error.errors[0]) {
-      setError(result.error.errors[0].message);
+    if (!result.success && result.error.message) {
+      setError(result.error.message);
       return false;
     }
     setError(null);
@@ -83,15 +81,15 @@ const AuthModal = ({
 
   const validateSignUp = () => {
     const result = signUpSchema.safeParse({ email, password });
-    if (!result.success && result.error.errors[0]) {
-      setError(result.error.errors[0]?.message!);
+    if (!result.success && result.error.message) {
+      setError(result.error.message);
       return false;
     }
     setError(null);
     return true;
   };
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!validateSignIn()) return;
 

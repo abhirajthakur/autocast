@@ -5,23 +5,23 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "rm -rf dist && tsc",
-    "start": "node dist/index.js",
+    "start": "node --enable-source-maps dist/index.js",
     "inngest": "npx inngest-cli@latest dev",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate"
   },
   "imports": {
-    "#ai/*": "./src/ai/*",
-    "#config/*": "./src/config/*",
-    "#db/*": "./src/db/*",
-    "#inngest/*": "./src/inngest/*",
-    "#lib/*": "./src/lib/*",
-    "#middleware/*": "./src/middleware/*",
-    "#routes/*": "./src/routes/*"
+    "#routes/*": "./dist/routes/*",
+    "#db/*": "./dist/db/*",
+    "#ai/*": "./dist/ai/*",
+    "#config/*": "./dist/config/*",
+    "#inngest/*": "./dist/inngest/*",
+    "#lib/*": "./dist/lib/*",
+    "#middleware/*": "./dist/middleware/*"
   },
   "exports": {
-    "./routes": "./src/routes/index.ts",
-    "./schema": "./src/db/schema.ts"
+    "./routes": "./dist/routes/index.js",
+    "./schema": "./dist/db/schema.js"
   },
   "dependencies": {
     "@autocast/shared": "workspace:*",
@@ -38,7 +38,7 @@
     "hono": "^4.11.1",
     "inngest": "^3.48.1",
     "pg": "^8.16.3",
-    "zod": "3.25.76"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",

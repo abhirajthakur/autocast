@@ -3,6 +3,10 @@ import {
   StepStatusSchema,
   AssetTypeSchema,
   AiProviderSchema,
+  JobStatus,
+  StepStatus,
+  AssetType,
+  AiProvider,
 } from "@autocast/shared";
 import { createSelectSchema } from "drizzle-zod";
 import { relations } from "drizzle-orm";
@@ -18,10 +22,10 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-export const jobStatusEnum = pgEnum("job_status", JobStatusSchema.options);
-export const stepStatusEnum = pgEnum("step_status", StepStatusSchema.options);
-export const assetTypeEnum = pgEnum("asset_type", AssetTypeSchema.options);
-export const providerEnum = pgEnum("ai_provider", AiProviderSchema.options);
+export const jobStatusEnum = pgEnum("job_status", JobStatus);
+export const stepStatusEnum = pgEnum("step_status", StepStatus);
+export const assetTypeEnum = pgEnum("asset_type", AssetType);
+export const providerEnum = pgEnum("ai_provider", AiProvider);
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
