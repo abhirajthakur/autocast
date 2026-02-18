@@ -1,53 +1,14 @@
+"use client";
+
 import AppHeader from "@/components/app-header";
 import JobCard from "@/components/job-card";
 import PageHeader from "@/components/page-header";
+import { useJobs } from "@/hooks/useJob";
+import { useSession } from "@/lib/auth-client";
 import { Button } from "@autocast/ui/components/button";
-import { Inbox, Plus } from "lucide-react";
+import { Inbox, Loader2, Plus } from "lucide-react";
 import Link from "next/link";
-
-// Mock data
-const mockJobs = [
-  {
-    id: "job-1",
-    title: "The Future of AI in Content Creation",
-    timestamp: "2 hours ago",
-    status: "completed" as const,
-    progress: 100,
-    contentType: "Blog",
-  },
-  {
-    id: "job-2",
-    title: "Podcast Episode 47: Developer Tools",
-    timestamp: "4 hours ago",
-    status: "processing" as const,
-    progress: 65,
-    contentType: "Transcript",
-  },
-  {
-    id: "job-3",
-    title: "Product Launch Announcement",
-    timestamp: "1 day ago",
-    status: "completed" as const,
-    progress: 100,
-    contentType: "Notes",
-  },
-  {
-    id: "job-4",
-    title: "Weekly Newsletter Draft",
-    timestamp: "1 day ago",
-    status: "queued" as const,
-    progress: 0,
-    contentType: "Blog",
-  },
-  {
-    id: "job-5",
-    title: "Technical Documentation Update",
-    timestamp: "2 days ago",
-    status: "failed" as const,
-    progress: 45,
-    contentType: "Notes",
-  },
-];
+import { useRouter } from "next/navigation";
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-16 px-4">
@@ -74,8 +35,33 @@ const EmptyState = () => (
 );
 
 export default function DashboardPage() {
-  // TODO: replace mockJobs with realData
-  const hasJobs = mockJobs.length > 0;
+  const router = useRouter();
+  const { data: session, isPending: sessionLoading } = useSession();
+  const { data: jobs, error, isLoading: jobsLoading } = useJobs();
+
+  if (sessionLoading || jobsLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!session?.user) {
+    router.push("/signin");
+    return null;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center text-red-500">
+        Error: {error.message}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -95,9 +81,9 @@ export default function DashboardPage() {
             </Button>
           </PageHeader>
 
-          {hasJobs ? (
+          {jobs && jobs.length > 0 ? (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {mockJobs.map((job) => (
+              {jobs.map((job) => (
                 <JobCard key={job.id} {...job} />
               ))}
             </div>

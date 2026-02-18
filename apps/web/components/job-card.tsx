@@ -1,27 +1,14 @@
+import { formatRelativeDate } from "@/lib/format-date";
+import { JobSummary } from "@autocast/shared";
 import { Card, CardContent, CardHeader } from "@autocast/ui/components/card";
-import { Clock, FileText } from "lucide-react";
+import { Clock } from "lucide-react";
 import Link from "next/link";
 import ProgressBar from "./progress-bar";
 import StatusBadge from "./status-badge";
-import { JobStatus } from "@autocast/shared";
 
-interface JobCardProps {
-  id: string;
-  title: string;
-  timestamp: string;
-  status: JobStatus;
-  progress: number;
-  contentType: string;
-}
+const JobCard = ({ id, title, status, progress, createdAt }: JobSummary) => {
+  const relativeTime = formatRelativeDate(createdAt);
 
-const JobCard = ({
-  id,
-  title,
-  timestamp,
-  status,
-  progress,
-  contentType,
-}: JobCardProps) => {
   return (
     <Link href={`/job/${id}`}>
       <Card className="group cursor-pointer border-border/50 bg-card hover:border-primary/30 hover:bg-background-subtle transition-all duration-300">
@@ -33,12 +20,8 @@ const JobCard = ({
               </h3>
               <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
-                  <FileText className="h-3 w-3" />
-                  {contentType}
-                </span>
-                <span className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />
-                  {timestamp}
+                  {relativeTime}
                 </span>
               </div>
             </div>

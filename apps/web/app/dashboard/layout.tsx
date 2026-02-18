@@ -1,4 +1,3 @@
-import ProtectedRoute from "@/components/auth/protected-route";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,5 +10,5 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <ProtectedRoute>{children}</ProtectedRoute>;
+  return <>{children}</>;
 }

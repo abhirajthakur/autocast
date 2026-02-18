@@ -1,7 +1,6 @@
+import { StepStatus } from "@autocast/shared";
 import { cn } from "@autocast/ui/lib/utils";
 import { AlertCircle, Check, Circle, Loader2 } from "lucide-react";
-
-type StepStatus = "pending" | "in_progress" | "completed" | "failed";
 
 interface WorkflowStepProps {
   icon: React.ReactNode;
@@ -11,13 +10,18 @@ interface WorkflowStepProps {
 }
 
 const statusIcons = {
-  pending: Circle,
-  in_progress: Loader2,
-  completed: Check,
-  failed: AlertCircle,
+  PENDING: Circle,
+  RUNNING: Loader2,
+  COMPLETED: Check,
+  FAILED: AlertCircle,
 };
 
-const WorkflowStep = ({ icon, title, status, isLast = false }: WorkflowStepProps) => {
+const WorkflowStep = ({
+  icon,
+  title,
+  status,
+  isLast = false,
+}: WorkflowStepProps) => {
   const StatusIcon = statusIcons[status];
 
   return (
@@ -26,17 +30,21 @@ const WorkflowStep = ({ icon, title, status, isLast = false }: WorkflowStepProps
         <div
           className={cn(
             "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all duration-300",
-            status === "pending" && "border-border bg-muted text-muted-foreground",
-            status === "in_progress" && "border-blue-500 bg-blue-500/20 text-blue-400",
-            status === "completed" && "border-emerald-500 bg-emerald-500/20 text-emerald-400",
-            status === "failed" && "border-destructive bg-destructive/20 text-destructive"
+            status === "PENDING" &&
+              "border-border bg-muted text-muted-foreground",
+            status === "RUNNING" &&
+              "border-blue-500 bg-blue-500/20 text-blue-400",
+            status === "COMPLETED" &&
+              "border-emerald-500 bg-emerald-500/20 text-emerald-400",
+            status === "FAILED" &&
+              "border-destructive bg-destructive/20 text-destructive",
           )}
         >
-          {status === "in_progress" ? (
+          {status === "RUNNING" ? (
             <Loader2 className="h-5 w-5 animate-spin" />
-          ) : status === "completed" ? (
+          ) : status === "COMPLETED" ? (
             <Check className="h-5 w-5" />
-          ) : status === "failed" ? (
+          ) : status === "FAILED" ? (
             <AlertCircle className="h-5 w-5" />
           ) : (
             <span className="text-muted-foreground">{icon}</span>
@@ -46,7 +54,7 @@ const WorkflowStep = ({ icon, title, status, isLast = false }: WorkflowStepProps
           <div
             className={cn(
               "w-0.5 h-8 mt-2 transition-colors duration-300",
-              status === "completed" ? "bg-emerald-500/50" : "bg-border"
+              status === "COMPLETED" ? "bg-emerald-500/50" : "bg-border",
             )}
           />
         )}
@@ -55,10 +63,10 @@ const WorkflowStep = ({ icon, title, status, isLast = false }: WorkflowStepProps
         <p
           className={cn(
             "text-sm font-medium transition-colors",
-            status === "pending" && "text-muted-foreground",
-            status === "in_progress" && "text-blue-400",
-            status === "completed" && "text-emerald-400",
-            status === "failed" && "text-destructive"
+            status === "PENDING" && "text-muted-foreground",
+            status === "RUNNING" && "text-blue-400",
+            status === "COMPLETED" && "text-emerald-400",
+            status === "FAILED" && "text-destructive",
           )}
         >
           {title}
@@ -69,4 +77,3 @@ const WorkflowStep = ({ icon, title, status, isLast = false }: WorkflowStepProps
 };
 
 export default WorkflowStep;
-

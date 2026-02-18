@@ -1,6 +1,7 @@
 "use client";
 
 import AppHeader from "@/components/app-header";
+import { useSubmitJob } from "@/hooks/useJob";
 import { Button } from "@autocast/ui/components/button";
 import {
   Card,
@@ -11,13 +12,6 @@ import {
 } from "@autocast/ui/components/card";
 import { Input } from "@autocast/ui/components/input";
 import { Label } from "@autocast/ui/components/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@autocast/ui/components/select";
 import { Switch } from "@autocast/ui/components/switch";
 import { Textarea } from "@autocast/ui/components/textarea";
 import { Captions, Loader2, Mic, Sparkles, Video } from "lucide-react";
@@ -30,20 +24,19 @@ export default function SubmitContentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-  const [contentType, setContentType] = useState("blog");
   const [generateVideo, setGenerateVideo] = useState(true);
   const [generateVoiceover, setGenerateVoiceover] = useState(true);
   const [generateCaptions, setGenerateCaptions] = useState(true);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const mutation = useSubmitJob();
+
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+
     setIsSubmitting(true);
+    const data = await mutation.mutateAsync({ content, title });
 
-    //TODO: Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    // Redirect to job detail page
-    router.push("/job/demo-job-1");
+    router.push(`/jobs/${data.jobId}`);
   };
 
   const isValid = content.trim().length > 0;
@@ -92,21 +85,6 @@ export default function SubmitContentPage() {
                     onChange={(e) => setContent(e.target.value)}
                     className="min-h-[200px] resize-none"
                   />
-                </div>
-
-                {/* Content Type */}
-                <div className="space-y-2">
-                  <Label>Content Type</Label>
-                  <Select value={contentType} onValueChange={setContentType}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="blog">Blog Post</SelectItem>
-                      <SelectItem value="transcript">Transcript</SelectItem>
-                      <SelectItem value="notes">Notes</SelectItem>
-                    </SelectContent>
-                  </Select>
                 </div>
 
                 {/* Outputs */}

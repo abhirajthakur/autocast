@@ -12,15 +12,10 @@ import {
 import { LogOut, Zap } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import AuthModal from "./auth/auth-modal";
 
 const Header = () => {
   const { data: session } = useSession();
   const user = session?.user;
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authModalTab, setAuthModalTab] = useState<"signin" | "signup">(
-    "signin",
-  );
 
   const navLinks = [
     { href: "/#features", label: "Features" },
@@ -28,11 +23,6 @@ const Header = () => {
     // { href: "/#pricing", label: "Pricing" },
     // { href: "/#docs", label: "Docs" },
   ];
-
-  const openAuthModal = (tab: "signin" | "signup") => {
-    setAuthModalTab(tab);
-    setAuthModalOpen(true);
-  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -101,29 +91,16 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => openAuthModal("signin")}
-              >
-                Sign In
+              <Button variant="ghost" size="sm" asChild>
+                <Link href={"/signin"}>Sign In</Link>
               </Button>
-              <Button
-                variant="hero"
-                size="sm"
-                onClick={() => openAuthModal("signup")}
-              >
-                Get Started
+              <Button variant="hero" size="sm" asChild>
+                <Link href={"/signup"}>Get Started</Link>
               </Button>
             </>
           )}
         </div>
       </div>
-      <AuthModal
-        open={authModalOpen}
-        onOpenChange={setAuthModalOpen}
-        defaultTab={authModalTab}
-      />
     </header>
   );
 };

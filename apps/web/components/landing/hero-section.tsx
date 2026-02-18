@@ -2,7 +2,6 @@ import { Button } from "@autocast/ui/components/button";
 import {
   Plus,
   Play,
-  Check,
   FileText,
   Sparkles,
   Video,
@@ -24,14 +23,6 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Left content */}
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium animate-fade-up">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              v2.0 NOW AVAILABLE
-            </div>
-
             <div className="space-y-4 animate-fade-up animation-delay-200">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
                 Turn <span className="gradient-text-primary">long-form</span>
@@ -58,20 +49,20 @@ const HeroSection = () => {
               </Button>
             </div>
 
-            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground animate-fade-up animation-delay-600">
-              <span className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-emerald-500" />
-                Free Tier
-              </span>
-              <span className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-emerald-500" />
-                No Credit Card
-              </span>
-              <span className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-emerald-500" />
-                API Access
-              </span>
-            </div>
+            {/* <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground animate-fade-up animation-delay-600"> */}
+            {/*   <span className="flex items-center gap-2"> */}
+            {/*     <Check className="h-4 w-4 text-emerald-500" /> */}
+            {/*     Free Tier */}
+            {/*   </span> */}
+            {/*   <span className="flex items-center gap-2"> */}
+            {/*     <Check className="h-4 w-4 text-emerald-500" /> */}
+            {/*     No Credit Card */}
+            {/*   </span> */}
+            {/*   <span className="flex items-center gap-2"> */}
+            {/*     <Check className="h-4 w-4 text-emerald-500" /> */}
+            {/*     API Access */}
+            {/*   </span> */}
+            {/* </div> */}
           </div>
 
           {/* Right visual - Pipeline illustration */}

@@ -4,6 +4,8 @@ import AppHeader from "@/components/app-header";
 import AssetPreview from "@/components/asset-preview";
 import StatusBadge from "@/components/status-badge";
 import WorkflowStep from "@/components/workflow-step";
+import { useJob } from "@/hooks/useJob";
+import { useSession } from "@/lib/auth-client";
 import { Button } from "@autocast/ui/components/button";
 import {
   Card,
@@ -11,37 +13,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@autocast/ui/components/card";
-import { ArrowLeft, Clock, FileText, Video } from "lucide-react";
+import { ArrowLeft, Clock, Loader2, Video } from "lucide-react";
 import Link from "next/link";
-
-// Mock job data
-const mockJobData = {
-  id: "job-1",
-  title: "The Future of AI in Content Creation",
-  contentType: "Blog",
-  timestamp: "Dec 22, 2024 at 2:34 PM",
-  status: "processing" as const,
-  steps: [
-    { title: "Content validated", status: "completed" as const },
-    { title: "Script prepared", status: "completed" as const },
-    { title: "Visuals generated", status: "completed" as const },
-    { title: "Voiceover created", status: "in_progress" as const },
-    { title: "Video assembled", status: "pending" as const },
-  ],
-  assets: {
-    captions: {
-      content: `1
-00:00:00,000 --> 00:00:04,500
-The future of AI in content creation
-is not just about automation.
-
-2
-00:00:04,500 --> 00:00:09,000
-It's about augmenting human creativity
-with intelligent assistance.`,
-    },
-  },
-};
+import { useRouter } from "next/navigation";
 
 type JobDetailPageProps = {
   params: {
@@ -50,8 +24,42 @@ type JobDetailPageProps = {
 };
 
 export default function JobDetailPage({ params }: JobDetailPageProps) {
+  const router = useRouter();
+  const { data: session, isPending: sessionLoading } = useSession();
+  const { data, isLoading: jobLoading, error } = useJob(params.id);
 
-  const job = mockJobData; //TODO: Replace with fetch(params.id)
+  if (sessionLoading || jobLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+  if (!session?.user) {
+    router.push("/signin");
+    return null;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center text-red-500">
+        Error: {error.message}
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground">
+        No job found
+      </div>
+    );
+  }
+
+  const { job, steps } = data;
 
   return (
     <div className="min-h-screen bg-background">
@@ -73,17 +81,14 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
             <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold mb-2">
-                  {job.title}
+                  {job.title ?? "Untitled Job"}
                 </h1>
 
-                <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <FileText className="h-4 w-4" />
-                    {job.contentType}
-                  </span>
+                {/* <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground"> */}
+                <div className="text-sm text-muted-foreground">
                   <span className="flex items-center gap-1.5">
                     <Clock className="h-4 w-4" />
-                    {job.timestamp}
+                    {new Date(job.createdAt).toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -101,15 +106,15 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                {job.steps.map((step, index) => (
+                {steps.map((step, index) => (
                   <WorkflowStep
-                    key={step.title}
+                    key={step.id}
                     icon={
                       <span className="text-xs font-mono">{index + 1}</span>
                     }
-                    title={step.title}
+                    title={step.stepName}
                     status={step.status}
-                    isLast={index === job.steps.length - 1}
+                    isLast={index === steps.length - 1}
                   />
                 ))}
               </CardContent>
@@ -133,11 +138,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
 
               <AssetPreview type="audio" title="Voiceover" />
               <AssetPreview type="image" title="Scene Images" />
-              <AssetPreview
-                type="captions"
-                title="Captions (SRT)"
-                content={job.assets.captions.content}
-              />
+              <AssetPreview type="captions" title="Captions (SRT)" />
             </div>
           </div>
 
