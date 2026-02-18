@@ -1,14 +1,4 @@
-import {
-  JobStatusSchema,
-  StepStatusSchema,
-  AssetTypeSchema,
-  AiProviderSchema,
-  JobStatus,
-  StepStatus,
-  AssetType,
-  AiProvider,
-} from "@autocast/shared";
-import { createSelectSchema } from "drizzle-zod";
+import { AiProvider, AssetType, JobStatus, StepStatus } from "@autocast/shared";
 import { relations } from "drizzle-orm";
 import {
   boolean,
@@ -126,6 +116,7 @@ export const jobs = pgTable("jobs", {
   title: text("title"),
   originalContent: text("original_content").notNull(),
   status: jobStatusEnum("status").default("QUEUED").notNull(),
+  progress: integer("progress").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -136,7 +127,7 @@ export const jobSteps = pgTable("job_steps", {
     .notNull(),
   stepName: text("step_name").notNull(),
   status: stepStatusEnum("status").default("PENDING").notNull(),
-  provider: providerEnum("provider"),
+  provider: providerEnum("provider").notNull(),
   error: text("error"),
   startedAt: timestamp("started_at"),
   completedAt: timestamp("completed_at"),
@@ -157,6 +148,3 @@ export const assets = pgTable("assets", {
   metadata: jsonb("metadata"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
-
-export const jobIdSchema = createSelectSchema(jobs).pick({ id: true });
-export const assetIdSchema = createSelectSchema(assets).pick({ id: true });

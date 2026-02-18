@@ -1,0 +1,1 @@
+ALTER TABLE "job_steps" ALTER COLUMN "provider" SET NOT NULL;
