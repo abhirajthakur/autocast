@@ -1,1 +1,1 @@
-{"root":["./src/enums.ts","./src/index.ts"],"version":"5.9.3"}
+{"root":["./src/asset.ts","./src/enums.ts","./src/index.ts","./src/job.ts"],"version":"5.9.3"}

@@ -1,24 +1,24 @@
 import { z } from "zod";
 
-export const JobStatusSchema = z.enum([
+export const jobStatusSchema = z.enum([
   "QUEUED",
   "PROCESSING",
   "COMPLETED",
   "FAILED",
 ]);
-export const JobStatus = JobStatusSchema.enum;
-export type JobStatus = Lowercase<z.infer<typeof JobStatusSchema>>;
+export const JobStatus = jobStatusSchema.enum;
+export type JobStatus = z.infer<typeof jobStatusSchema>;
 
-export const StepStatusSchema = z.enum([
+export const stepStatusSchema = z.enum([
   "PENDING",
   "RUNNING",
   "COMPLETED",
   "FAILED",
 ]);
-export const StepStatus = StepStatusSchema.enum;
-export type StepStatus = Lowercase<z.infer<typeof StepStatusSchema>>;
+export const StepStatus = stepStatusSchema.enum;
+export type StepStatus = z.infer<typeof stepStatusSchema>;
 
-export const AssetTypeSchema = z.enum([
+export const assetTypeSchema = z.enum([
   "SUMMARY",
   "SCRIPT",
   "STORYBOARD",
@@ -26,9 +26,9 @@ export const AssetTypeSchema = z.enum([
   "VIDEO",
   "CAPTIONS",
 ]);
-export const AssetType = AssetTypeSchema.enum;
-export type AssetType = Lowercase<z.infer<typeof AssetTypeSchema>>;
+export const AssetType = assetTypeSchema.enum;
+export type AssetType = z.infer<typeof assetTypeSchema>;
 
-export const AiProviderSchema = z.enum(["GEMINI", "OPENROUTER", "HUGGINGFACE"]);
-export const AiProvider = AiProviderSchema.enum;
-export type AiProvider = Lowercase<z.infer<typeof AiProviderSchema>>;
+export const aiProviderSchema = z.enum(["GEMINI", "OPENROUTER", "HUGGINGFACE"]);
+export const AiProvider = aiProviderSchema.enum;
+export type AiProvider = z.infer<typeof aiProviderSchema>;
