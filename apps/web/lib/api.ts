@@ -1,47 +1,66 @@
 import { createClient } from "@autocast/api-client";
+import { SubmitJobBody } from "@autocast/shared";
 
 export const client = createClient(process.env.NEXT_PUBLIC_API_URL!);
 
-export async function getJobs() {
-  const request = await client.api.jobs.$get();
-  if (request.status === 401) {
-    throw new Error("Unauthorized");
-  }
-  const response = await request.json();
-
-  return response;
+function assertNever(x: never): never {
+  throw new Error(`Unhandled response status: ${JSON.stringify(x)}`);
 }
 
-export async function getJob(id: string) {
-  const request = await client.api.jobs[":id"].$get({
-    param: {
-      id,
-    },
+export async function getJobs() {
+  const response = await client.api.jobs.$get();
+  switch (response.status) {
+    case 200:
+      return await response.json();
+
+    case 401:
+      throw new Error("Unauthorized");
+
+    default:
+      return assertNever(response);
+  }
+}
+
+export async function getJobById(id: string) {
+  const response = await client.api.jobs[":id"].$get({
+    param: { id },
   });
 
-  if (request.status === 401) {
-    throw new Error("Unauthorized");
-  }
-  if (request.status === 404) {
-    throw new Error("Not Found");
-  }
+  switch (response.status) {
+    case 200:
+      return await response.json();
 
-  const response = await request.json();
+    case 401:
+      throw new Error("Unauthorized");
 
-  return response;
+    case 404: {
+      const { error } = await response.json();
+      throw new Error(error);
+    }
+
+    default:
+      return assertNever(response);
+  }
 }
 
-// export async function submitJob(payload: SubmitJobPayload): Promise<Job> {
-//   return request<Job>("/api/jobs", {
-//     method: "POST",
-//     body: JSON.stringify(payload),
-//   });
-// }
-//
-// export async function deleteJob(id: string): Promise<void> {
-//   return request<void>(`/api/jobs/${id}`, { method: "DELETE" });
-// }
-//
-// export async function regenerateAssets(jobId: string): Promise<void> {
-//   return request<void>(`/api/jobs/${jobId}/regenerate`, { method: "POST" });
-// }
+export async function submitJob(payload: SubmitJobBody) {
+  const response = await client.api.jobs.$post({
+    json: payload,
+  });
+
+  switch (response.status) {
+    case 201:
+      return await response.json();
+
+    case 401:
+      throw new Error("Unauthorized");
+
+    case 500: {
+      const { error } = await response.json();
+      throw new Error(error);
+    }
+
+    default:
+      return assertNever(response);
+  }
+}
