@@ -2,6 +2,7 @@
 
 import AppHeader from "@/components/app-header";
 import { useSubmitJob } from "@/hooks/useJob";
+import { useSession } from "@/lib/auth-client";
 import { Button } from "@autocast/ui/components/button";
 import {
   Card,
@@ -16,10 +17,11 @@ import { Switch } from "@autocast/ui/components/switch";
 import { Textarea } from "@autocast/ui/components/textarea";
 import { Captions, Loader2, Mic, Sparkles, Video } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SubmitContentPage() {
   const router = useRouter();
+  const { data: session, isPending: sessionLoading } = useSession();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [content, setContent] = useState("");
@@ -29,6 +31,20 @@ export default function SubmitContentPage() {
   const [generateCaptions, setGenerateCaptions] = useState(true);
 
   const mutation = useSubmitJob();
+
+  useEffect(() => {
+    if (!sessionLoading && !session?.user) {
+      router.replace("/signin");
+    }
+  }, [session, sessionLoading, router]);
+
+  if (sessionLoading || !session?.user) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -88,35 +104,37 @@ export default function SubmitContentPage() {
                 </div>
 
                 {/* Outputs */}
-                <div className="space-y-4">
-                  <Label className="text-sm font-medium">Outputs</Label>
+                {/* TODO: Implement this functinality later */}
 
-                  <div className="space-y-4 rounded-lg border p-4">
-                    <ToggleRow
-                      icon={<Video className="h-4 w-4 text-emerald-400" />}
-                      label="Generate video"
-                      checked={generateVideo}
-                      onChange={setGenerateVideo}
-                      bg="bg-emerald-500/20"
-                    />
-
-                    <ToggleRow
-                      icon={<Mic className="h-4 w-4 text-blue-400" />}
-                      label="Generate voiceover"
-                      checked={generateVoiceover}
-                      onChange={setGenerateVoiceover}
-                      bg="bg-blue-500/20"
-                    />
-
-                    <ToggleRow
-                      icon={<Captions className="h-4 w-4 text-amber-400" />}
-                      label="Generate captions"
-                      checked={generateCaptions}
-                      onChange={setGenerateCaptions}
-                      bg="bg-amber-500/20"
-                    />
-                  </div>
-                </div>
+                {/* <div className="space-y-4"> */}
+                {/*   <Label className="text-sm font-medium">Outputs</Label> */}
+                {/**/}
+                {/*   <div className="space-y-4 rounded-lg border p-4"> */}
+                {/*     <ToggleRow */}
+                {/*       icon={<Video className="h-4 w-4 text-emerald-400" />} */}
+                {/*       label="Generate video" */}
+                {/*       checked={generateVideo} */}
+                {/*       onChange={setGenerateVideo} */}
+                {/*       bg="bg-emerald-500/20" */}
+                {/*     /> */}
+                {/**/}
+                {/*     <ToggleRow */}
+                {/*       icon={<Mic className="h-4 w-4 text-blue-400" />} */}
+                {/*       label="Generate voiceover" */}
+                {/*       checked={generateVoiceover} */}
+                {/*       onChange={setGenerateVoiceover} */}
+                {/*       bg="bg-blue-500/20" */}
+                {/*     /> */}
+                {/**/}
+                {/*     <ToggleRow */}
+                {/*       icon={<Captions className="h-4 w-4 text-amber-400" />} */}
+                {/*       label="Generate captions" */}
+                {/*       checked={generateCaptions} */}
+                {/*       onChange={setGenerateCaptions} */}
+                {/*       bg="bg-amber-500/20" */}
+                {/*     /> */}
+                {/*   </div> */}
+                {/* </div> */}
 
                 <p className="text-xs text-muted-foreground">
                   Processing happens in the background. You'll be able to track

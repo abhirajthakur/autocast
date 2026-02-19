@@ -9,6 +9,7 @@ import { Button } from "@autocast/ui/components/button";
 import { Inbox, Loader2, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-16 px-4">
@@ -39,7 +40,13 @@ export default function DashboardPage() {
   const { data: session, isPending: sessionLoading } = useSession();
   const { data: jobs, error, isLoading: jobsLoading } = useJobs();
 
-  if (sessionLoading || jobsLoading) {
+  useEffect(() => {
+    if (!sessionLoading && !session?.user) {
+      router.replace("/signin");
+    }
+  }, [session, sessionLoading, router]);
+
+  if (sessionLoading || jobsLoading || !session?.user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -48,11 +55,6 @@ export default function DashboardPage() {
         </div>
       </div>
     );
-  }
-
-  if (!session?.user) {
-    router.push("/signin");
-    return null;
   }
 
   if (error) {
