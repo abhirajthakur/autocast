@@ -1,5 +1,5 @@
 import { db } from "#db/index.js";
-import { jobs, jobSteps } from "#db/schema.js";
+import { jobs } from "#db/schema.js";
 import { inngest } from "#inngest/client.js";
 import { createRouter } from "#lib/create-app.js";
 import authMiddleware from "#middleware/auth.js";
@@ -49,10 +49,21 @@ const jobsRouter = createRouter()
       columns: {
         id: true,
         title: true,
+
         originalContent: true,
         status: true,
         progress: true,
         createdAt: true,
+      },
+      with: {
+        steps: {
+          columns: {
+            id: true,
+            stepName: true,
+            status: true,
+            createdAt: true,
+          },
+        },
       },
       where: and(eq(jobs.id, id), eq(jobs.userId, user.id)),
     });
@@ -61,18 +72,17 @@ const jobsRouter = createRouter()
       return c.json({ error: "Job not found" }, 404);
     }
 
-    const { jobId, ...columns } = jobSteps._.columns;
-
-    const steps = await db
-      .select(columns)
-      .from(jobSteps)
-      .where(eq(jobSteps.jobId, id))
-      .orderBy(jobSteps.id);
-
     return c.json(
       getJobResponseSchema.parse({
-        job,
-        steps,
+        job: {
+          id: job.id,
+          title: job.title,
+          originalContent: job.originalContent,
+          status: job.status,
+          progress: job.progress,
+          createdAt: job.createdAt,
+        },
+        steps: job.steps,
       }),
       200,
     );

@@ -2,6 +2,7 @@ import { env } from "#config/env.js";
 import { createRouter } from "#lib/create-app.js";
 import assetsRouter from "#routes/assets.js";
 import authRouter from "#routes/auth.js";
+import inngestRouter from "#routes/inngest.js";
 import jobsRouter from "#routes/jobs.js";
 
 import { cors } from "hono/cors";
@@ -20,6 +21,7 @@ const app = createRouter()
       maxAge: 600,
     }),
   )
+  .route("/api/inngest", inngestRouter)
   .route("/api/auth", authRouter)
   .route("/api/jobs", jobsRouter)
   .route("/api/assets", assetsRouter);
